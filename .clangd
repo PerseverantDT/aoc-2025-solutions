@@ -1,0 +1,11 @@
+CompileFlags:
+  Add:
+    - -std=gnu23
+    - -Wall
+    - -Wextra
+    - -Wpedantic
+    - -Werror
+    - -Wno-unknown-attributes
+    - -Wno-ignored-attributes
+    - -finput-charset=UTF-8
+    - -fexec-charset=UTF-8
