@@ -46,13 +46,12 @@ static bool convert_number_to_string(
     return true;
 }
 
-uint64_t part2_get_subtotal_of_invalid_ids(char const *line) {
-    auto range = get_range(line);
+uint64_t part2_get_subtotal_of_invalid_ids(uint64_t start, uint64_t end) {
     char num_as_str[21];
     char pattern[11];
     uint64_t subtotal = 0;
 
-    for (auto num = range.start; num <= range.end; num++) {
+    for (auto num = start; num <= end; num++) {
         bool is_invalid = false;
         if (!convert_number_to_string(num, num_as_str, 21)) {
             fprintf(stderr, "Could not convert %" PRIu64 " into string.\n", num);
@@ -94,26 +93,8 @@ uint64_t part2_get_subtotal_of_invalid_ids(char const *line) {
     return subtotal;
 }
 
-[[gnu::nonnull(1)]]
-[[gnu::access(read_only, 1)]]
-uint64_t part1_get_subtotal_of_invalid_ids(char const *line) {
-    uint64_t start;
-    uint64_t end;
+uint64_t part1_get_subtotal_of_invalid_ids(uint64_t start, uint64_t end) {
     uint64_t subtotal = 0;
-
-    if (sscanf(line, "%" SCNu64 "-%" SCNu64, &start, &end) != 2) {
-        fprintf(stderr, "Failed to parse range: \"%s\"", line);
-        return 0;
-    }
-
-    if (start > end) {
-        fprintf(stderr, "Start is greater than end: %" PRIu64 " > %" PRIu64, start, end);
-        return 0;
-    }
-
-    if (check_file != nullptr) {
-        fprintf(check_file, "Checking %" PRIu64 " to %" PRIu64 "\n", start, end);
-    }
 
     for (uint64_t i = start; i <= end; i++) {
         uint8_t digit_count = log10(i) + 1;
@@ -159,8 +140,14 @@ int main() {
     while (fscanf(input_file, "%c", &current_character) == 1) {
         if (current_character == ',') {
             line[buffer_index] = '\0';
-            part1_invalid_id_sum += part1_get_subtotal_of_invalid_ids(line);
-            part2_invalid_id_sum += part2_get_subtotal_of_invalid_ids(line);
+
+            auto range = get_range(line);
+            if (check_file != nullptr) {
+                fprintf(check_file, "Checking %" PRIu64 " to %" PRIu64 "\n", range.start, range.end);
+            }
+
+            part1_invalid_id_sum += part1_get_subtotal_of_invalid_ids(range.start, range.end);
+            part2_invalid_id_sum += part2_get_subtotal_of_invalid_ids(range.start, range.end);
             buffer_index = 0;
         }
         else {
@@ -171,8 +158,14 @@ int main() {
 
     // Process the final range
     line[buffer_index] = '\0';
-    part1_invalid_id_sum += part1_get_subtotal_of_invalid_ids(line);
-    part2_invalid_id_sum += part2_get_subtotal_of_invalid_ids(line);
+
+    auto range = get_range(line);
+    if (check_file != nullptr) {
+        fprintf(check_file, "Checking %" PRIu64 " to %" PRIu64 "\n", range.start, range.end);
+    }
+
+    part1_invalid_id_sum += part1_get_subtotal_of_invalid_ids(range.start, range.end);
+    part2_invalid_id_sum += part2_get_subtotal_of_invalid_ids(range.start, range.end);
     buffer_index = 0;
 
     printf("Part 1: The sum of all invalid IDs is %" PRIu64 "\n", part1_invalid_id_sum);
