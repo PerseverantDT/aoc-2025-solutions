@@ -8,31 +8,44 @@ C_FLAGS_RELEASE = $(C_FLAGS_BASE) -O3 -march=native -flto
 
 .PHONY: debug run_debug release run_release clean
 
-all: day01_debug day01_release
+all: debug release
 
 clean:
-	@rm day01_debug
-	@rm day01_release
-
+	@rm day01_debug day01_release day02_debug day02_release
 
 day01_debug: day01.c
 	@$(CC) $(C_FLAGS_DEBUG) $^ -o $@
 
-debug: day01_debug
+
+day02_debug: day02.c
+	@$(CC) $(C_FLAGS_DEBUG) -lm $^ -o $@
+
+debug: day01_debug day02_debug
 
 run_debug: debug
 	@echo "Day 1"
 	@echo "----------"
 	@./day01_debug
 	@echo "----------"
+	@echo "Day 2"
+	@echo "----------"
+	@./day02_debug
+	@echo "----------"
 
 day01_release: day01.c
 	@$(CC) $(C_FLAGS_RELEASE) $^ -o $@
 
-release: day01_release
+day02_release: day02.c
+	@$(CC) $(C_FLAGS_RELEASE) -lm $^ -o $@
+
+release: day01_release day02_release
 
 run_release: release
-	@echo "Day 1"
+	@echo "Day 1:"
 	@echo "----------"
 	@./day01_release
+	@echo "----------"
+	@echo "Day 2:"
+	@echo "----------"
+	@./day02_release
 	@echo "----------"
