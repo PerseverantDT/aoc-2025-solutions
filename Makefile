@@ -20,7 +20,10 @@ day01_debug: day01.c
 day02_debug: day02.c
 	@$(CC) $(C_FLAGS_DEBUG) -lm $^ -o $@
 
-debug: day01_debug day02_debug
+day03_debug: day03.c
+	@$(CC) $(C_FLAGS_DEBUG) $^ -o $@
+
+debug: day01_debug day02_debug day03_debug
 
 run_debug: debug
 	@echo "Day 1"
@@ -38,7 +41,10 @@ day01_release: day01.c
 day02_release: day02.c
 	@$(CC) $(C_FLAGS_RELEASE) -lm $^ -o $@
 
-release: day01_release day02_release
+day03_release: day03.c
+	@$(CC) $(C_FLAGS_RELEASE) $^ -o $@
+
+release: day01_release day02_release day03_release
 
 run_release: release
 	@echo "Day 1:"

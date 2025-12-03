@@ -12,7 +12,7 @@ Go check out Advent of Code 2025 at <https://adventofcode.com/2025>.
 | --- | ----- | ------ | ------ |
 | 01 | Secret Entrance | ⭐ | ⭐ |
 | 02 | Gift Shop | ⭐ | ⭐ |
-| 03 | ??? | | |
+| 03 | Lobby | ⭐ | |
 | 04 | ??? | | |
 | 05 | ??? | | |
 | 06 | ??? | | |
