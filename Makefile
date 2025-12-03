@@ -11,11 +11,10 @@ C_FLAGS_RELEASE = $(C_FLAGS_BASE) -O3 -march=native -flto
 all: debug release
 
 clean:
-	@rm day01_debug day01_release day02_debug day02_release
+	@rm day01_debug day01_release day02_debug day02_release day03_debug day03_release
 
 day01_debug: day01.c
 	@$(CC) $(C_FLAGS_DEBUG) $^ -o $@
-
 
 day02_debug: day02.c
 	@$(CC) $(C_FLAGS_DEBUG) -lm $^ -o $@
@@ -26,14 +25,15 @@ day03_debug: day03.c
 debug: day01_debug day02_debug day03_debug
 
 run_debug: debug
-	@echo "Day 1"
-	@echo "----------"
+	@echo "---- Day 01 ----"
 	@./day01_debug
-	@echo "----------"
-	@echo "Day 2"
-	@echo "----------"
+	@echo "----------------"
+	@echo "---- Day 02 ----"
 	@./day02_debug
-	@echo "----------"
+	@echo "----------------"
+	@echo "---- Day 03 ----"
+	@./day03_debug
+	@echo "----------------"
 
 day01_release: day01.c
 	@$(CC) $(C_FLAGS_RELEASE) $^ -o $@
@@ -47,11 +47,12 @@ day03_release: day03.c
 release: day01_release day02_release day03_release
 
 run_release: release
-	@echo "Day 1:"
-	@echo "----------"
+	@echo "---- Day 01 ----"
 	@./day01_release
-	@echo "----------"
-	@echo "Day 2:"
-	@echo "----------"
+	@echo "----------------"
+	@echo "---- Day 02 ----"
 	@./day02_release
-	@echo "----------"
+	@echo "----------------"
+	@echo "---- Day 03 ----"
+	@./day03_release
+	@echo "----------------"
