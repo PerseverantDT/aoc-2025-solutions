@@ -10,57 +10,20 @@ FILE *check_file = nullptr;
 constexpr long BUFFER_LENGTH = 2048;
 
 [[gnu::access(read_only, 1, 2)]]
-long part1_get_highest_joltage(char const *line, long line_length) {
+long get_highest_joltage(
+    char const *line,
+    int line_length,
+    int number_of_characters_to_fetch
+) {
     long joltage = 0;
-    long joltage2 = 0;
-    long position = -1;
+    int start_index = -1;
 
-    // Find the battery with the largest joltage.
-    for (long i = 0; i < line_length; i++) {
-        char c = line[i];
-        if (c - '0' > joltage) {
-            joltage = c - '0';
-            position = i;
-        }
-    }
-
-    assert(position != -1);
-
-    if (position + 1 == line_length) {
-        // The battery with the largest joltage is the last one. The second one
-        // needs to be the highest of the others.
-
-        for (long i = 0; i < position; i++) {
-            char c = line[i];
-            if (c - '0' > joltage2) {
-                joltage2 = c - '0';
-            }
-        }
-
-        return joltage2 * 10 + joltage;
-    }
-
-    for (long i = position + 1; i < line_length; i++) {
-        char c = line[i];
-        if (c - '0' > joltage2) {
-            joltage2 = c - '0';
-        }
-    }
-
-    return joltage * 10 + joltage2;
-}
-
-[[gnu::access(read_only, 1, 2)]]
-long part2_get_highest_joltage(char const *line, long line_length) {
-    long joltage = 0;
-    long start_index = -1;
-
-    for (int i = 0; i < 12; i++) {
+    for (int i = 0; i < number_of_characters_to_fetch; i++) {
         long highest_joltage = 0;
-        long highest_joltage_index = -1;
+        int highest_joltage_index = -1;
 
-        long search_limit = line_length - (12 - i) + 1;
-        for (long j = start_index + 1; j < search_limit; j++) {
+        int search_limit = line_length - (number_of_characters_to_fetch - i) + 1;
+        for (int j = start_index + 1; j < search_limit; j++) {
             long value = line[j] - '0';
             if (value > highest_joltage) {
                 highest_joltage = value;
@@ -108,13 +71,21 @@ int main(void) {
             line_length--;
         }
 
-        long part1_highest_joltage = part1_get_highest_joltage(buffer, line_length);
-        long part2_highest_joltage = part2_get_highest_joltage(buffer, line_length);
+        long part1_highest_joltage = get_highest_joltage(buffer, line_length, 2);
+        long part2_highest_joltage = get_highest_joltage(buffer, line_length, 12);
 
         part1_total_joltage += part1_highest_joltage;
         part2_total_joltage += part2_highest_joltage;
         if (check_file != nullptr) {
-            fprintf(check_file, "Joltage of \"%s\":\n\tPart 1: %ld (total: %ld)\n\tPart 2: %ld (total: %ld)\n", buffer, part1_highest_joltage, part1_total_joltage, part2_highest_joltage, part2_total_joltage);
+            fprintf(
+                check_file,
+                "Joltage of \"%s\":\n\tPart 1: %ld (total: %ld)\n\tPart 2: %ld (total: %ld)\n",
+                buffer,
+                part1_highest_joltage,
+                part1_total_joltage,
+                part2_highest_joltage,
+                part2_total_joltage
+            );
         }
     }
 
